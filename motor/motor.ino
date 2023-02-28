@@ -1,5 +1,3 @@
-#define F true
-#define BACK false
 
 void setup() {
   Serial.begin(9600);
@@ -16,22 +14,23 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.available()){
-    int s1[8];
-    for (int i; i < 8; i++){
-      s1[i]  = Serial.read();
-    }
+  if(Serial.available() > 0){
+    String cmd = Serial.readString();
+    Serial.println(cmd);
+    
     int Lvel, Rvel;
-    char Ldirection, Rdirection;
-    Ldirection = (char)(s1[0]);
-    Rdirection = (char)(s1[4]);
-    Lvel = s1[1]*100 + s1[2]*10 + s1[3] - 48 * 111;
-    Rvel = s1[5]*100 + s1[6]*10 + s1[7] - 48 * 111;
+    String Ldirection, Rdirection;
+    Ldirection = (String)(cmd[0]);
+    Rdirection = (String)(cmd[4]);
+    Lvel = (int)(cmd[1])*100 + (int)(cmd[2])*10 + (int)(cmd[3]) - 48 * 111;
+    Rvel = (int)(cmd[5])*100 + (int)(cmd[6])*10 + (int)(cmd[7]) - 48 * 111;
     LeftMotorControl(Lvel, Ldirection);
+    RightMotorControl(Rvel, Rdirection);
   }
+  delay(1);
 }
 
-void LeftMotorControl(int Lvel, char Ldirection){
+void LeftMotorControl(int Lvel, String Ldirection){
   if(Ldirection == "F"){
     digitalWrite(5,LOW);
     analogWrite(6,Lvel);
@@ -42,7 +41,7 @@ void LeftMotorControl(int Lvel, char Ldirection){
   }
 }
 
-void RightMotorControl(int Rvel, char Rdirection){
+void RightMotorControl(int Rvel, String Rdirection){
   if(Rdirection == "F"){
     digitalWrite(10,LOW);
     analogWrite(9,Rvel);
