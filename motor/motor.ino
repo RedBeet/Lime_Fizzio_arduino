@@ -1,3 +1,6 @@
+#include <DHT11.h>
+
+DHT11 dht11(A0);
 
 void setup() {
   Serial.begin(9600);
@@ -9,7 +12,6 @@ void setup() {
    for(int i=5;i<13;i++){
    digitalWrite(i,LOW);
   }
-
   motorON(true);
 }
 
@@ -27,7 +29,12 @@ void loop() {
     LeftMotorControl(Lvel, Ldirection);
     RightMotorControl(Rvel, Rdirection);
   }
-  delay(1);
+
+  int i;
+  float humi, temp;
+  if ((i = dht11.read(humi, temp)) == 0) {
+    Serial.println(temp);
+  }
 }
 
 void LeftMotorControl(int Lvel, String Ldirection){
