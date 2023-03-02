@@ -1,6 +1,3 @@
-#include <DHT11.h>
-
-DHT11 dht11(A0);
 
 void setup() {
   Serial.begin(9600);
@@ -28,12 +25,6 @@ void loop() {
     Rvel = (int)(cmd[5])*100 + (int)(cmd[6])*10 + (int)(cmd[7]) - 48 * 111;
     LeftMotorControl(Lvel, Ldirection);
     RightMotorControl(Rvel, Rdirection);
-  }
-
-  int i;
-  float humi, temp;
-  if ((i = dht11.read(humi, temp)) == 0) {
-    Serial.println(temp);
   }
 }
 
