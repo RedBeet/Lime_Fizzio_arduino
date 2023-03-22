@@ -2,11 +2,17 @@
 void setup() {
   Serial.begin(9600);
   
-  for(int i=5; i<13; i++){
+  for(int i=2; i<5; i++){
+   pinMode(i,OUTPUT);
+  }
+  for(int i=22; i<25; i++){
    pinMode(i,OUTPUT);
   }
 
-   for(int i=5;i<13;i++){
+   for(int i=2;i<5;i++){
+   digitalWrite(i,LOW);
+  }
+  for(int i=22;i<25;i++){
    digitalWrite(i,LOW);
   }
   motorON(true);
@@ -30,40 +36,37 @@ void loop() {
 
 void LeftMotorControl(int Lvel, String Ldirection){
   if(Ldirection == "F"){
-    digitalWrite(5,LOW);
-    analogWrite(6,Lvel);
+    digitalWrite(2,LOW);
+    analogWrite(3,Lvel);
   }
   else{
-    digitalWrite(6,LOW);
-    analogWrite(5,Lvel);
+    digitalWrite(3,LOW);
+    analogWrite(2,Lvel);
   }
 }
 
 void RightMotorControl(int Rvel, String Rdirection){
   if(Rdirection == "F"){
-    digitalWrite(10,LOW);
-    analogWrite(9,Rvel);
+    digitalWrite(5,LOW);
+    analogWrite(4,Rvel);
   }
   else{
-    digitalWrite(9,LOW);
-    analogWrite(10,Rvel);
+    digitalWrite(4,LOW);
+    analogWrite(5,Rvel);
   }
 }
 
 void motorON(boolean a){
   if(a == true)
   {
-    digitalWrite(7,HIGH);
-    digitalWrite(8,HIGH);
-    digitalWrite(11,HIGH);
-    digitalWrite(12,HIGH);
+    for(int i=22;i<25;i++){
+   digitalWrite(i,HIGH);
+  }
   }
   else
   {
-    digitalWrite(7,LOW);
-    digitalWrite(8,LOW);
-    digitalWrite(11,LOW);
-    digitalWrite(12,LOW);
+    for(int i=22;i<25;i++){
+   digitalWrite(i,LOW);
   }
-
+  }
 }

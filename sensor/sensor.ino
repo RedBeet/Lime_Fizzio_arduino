@@ -1,4 +1,5 @@
 #include <LiquidCrystal_I2C.h>
+#include <LCD.h>
 #include <Wire.h>
 #include <DHT11.h>
 #define TRIG_PIN_1 3
@@ -8,24 +9,28 @@
 
 DHT11 dht11(A0);
 
-LiquidCrystal_I2C lcd(0x3F, 16, 2);
+LiquidCrystal_I2C lcd(0x27,2,1,0,4,5,6,7);
 
 unsigned long previousMillis = 0;
 const long interval = 500; // interval between sensor readings (in milliseconds)
 float initialtemp;
+float initialhumi;
 
 void setup() {
-  Serial.begin(19200);
+  Serial.begin(9600);
 
   pinMode(TRIG_PIN_1, OUTPUT);
   pinMode(ECHO_PIN_1, INPUT);
   pinMode(TRIG_PIN_2, OUTPUT);
   pinMode(ECHO_PIN_2, INPUT);
 
-  lcd.init();
-  lcd.backlight();
+  lcd.begin (20,4); // 16 x 2 LCD module
+  lcd.setBacklightPin(3,POSITIVE); // BL, BL_POL
+  lcd.setBacklight(HIGH);
   lcd.setCursor(0,0);
-  lcd.print("   LIME  FIZZ  ");
+  lcd.print("    Lime  FiZZIO    ");
+  lcd.setCursor(0,3);
+  lcd.print("                    ");
 }
 
 void loop() {
@@ -57,17 +62,23 @@ void loop() {
     height2 = (duration2 / 2) * 0.0343;
 
     // Print the values to the serial monitor
-    String heights = String(height1) + " " + String(height2);
-    Serial.println(heights);
-  }
-
-  if (res == 0 || initialtemp != temp){
-    lcd.clear();
+    String values = String(height1) + " " + String(height2) + " " + String(humi) + " " + String(temp);
+    Serial.println(values);
     lcd.setCursor(0,0);
-    lcd.print("   LIME  FIZZ  ");
+    lcd.print("    Lime  FiZZIO    ");
     lcd.setCursor(0,1);
-    lcd.print(" temp : " + String(temp) + " C");
-    Serial.println("temperature : " + String(temp)+"C");
+    lcd.print("temperature  " + String(temp) + " C");
+    lcd.setCursor(0,2);
+    lcd.print("   humidity  " + String(humi) + " %");
     initialtemp = temp;
+    initialhumi = humi;
+  }
+  if (Serial.available()){
+    String str;
+    str = Serial.readString();
+    lcd.setCursor(0,3);
+    lcd.print("                    ");
+    lcd.setCursor(0,3);
+    lcd.print(str);
   }
 }
